@@ -70,7 +70,7 @@ Content-Type: application/json
 
 {
   "email": "manager.novibeograd@grocery.rs",
-  "password": "pogresna"
+  "password": "wrong-password"
 }
 ### 11. My nodes (Novi Beograd, Bezanija, Radnja 6)
 GET {{baseUrl}}/nodes
