@@ -72,3 +72,30 @@ Content-Type: application/json
   "email": "manager.novibeograd@grocery.rs",
   "password": "pogresna"
 }
+### 11. My nodes (Novi Beograd, Bezanija, Radnja 6)
+GET {{baseUrl}}/nodes
+Authorization: Bearer {{login.response.body.token}}
+
+### 12. Employees of Novi Beograd only (Jovana)
+GET {{baseUrl}}/nodes/{{me.response.body.node}}/employees
+Authorization: Bearer {{login.response.body.token}}
+
+### 13. Employees of Novi Beograd and below (Jovana, Luka, Petar)
+GET {{baseUrl}}/nodes/{{me.response.body.node}}/employees?descendants=true
+Authorization: Bearer {{login.response.body.token}}
+
+### 14. Managers of Novi Beograd only (Stefan)
+GET {{baseUrl}}/nodes/{{me.response.body.node}}/managers
+Authorization: Bearer {{login.response.body.token}}
+
+### 15. Managers of Novi Beograd and below (Mina, Stefan)
+GET {{baseUrl}}/nodes/{{me.response.body.node}}/managers?descendants=true
+Authorization: Bearer {{login.response.body.token}}
+
+### 16. Employee asks for managers (expect 403)
+GET {{baseUrl}}/nodes/{{me.response.body.node}}/managers
+Authorization: Bearer {{employee.response.body.token}}
+
+### 17. Bezanija employee asks about Novi Beograd, above them (expect 403)
+GET {{baseUrl}}/nodes/{{me.response.body.node}}/employees
+Authorization: Bearer {{employee.response.body.token}}

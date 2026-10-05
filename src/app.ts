@@ -2,6 +2,7 @@ import express from 'express';
 import { authRouter } from './routes/auth.routes';
 import { errorHandler } from './middleware/error.middleware';
 import { usersRouter } from './routes/users.routes';
+import { nodesRouter } from './routes/nodes.routes';
 
 export function createApp() {
   const app = express();
@@ -13,6 +14,7 @@ export function createApp() {
 
   app.use('/auth', authRouter);
   app.use('/users', usersRouter);
+  app.use('/nodes', nodesRouter);
 
   app.use(errorHandler);
   return app;
