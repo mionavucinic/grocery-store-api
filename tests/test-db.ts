@@ -12,6 +12,7 @@ export async function startTestDb() {
   mongo = await MongoMemoryServer.create();
     
   await mongoose.connect(mongo.getUri(), { runtimeAdapters: { os } });
+  await UserModel.init();
   await seed();
 }
 
