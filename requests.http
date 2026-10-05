@@ -1,0 +1,74 @@
+@baseUrl = http://localhost:3000
+
+### 1. Login as manager of Novi Beograd
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "manager.novibeograd@grocery.rs",
+  "password": "password123"
+}
+
+### 2. Who am I
+# @name me
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{login.response.body.token}}
+
+### 3. Create an employee in my node (expect 201)
+# @name created
+POST {{baseUrl}}/users
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "name": "Novi Radnik",
+  "email": "novi.radnik@grocery.rs",
+  "password": "password123",
+  "role": "employee",
+  "node": "{{me.response.body.node}}"
+}
+
+### 4. Get the created user (expect 200)
+GET {{baseUrl}}/users/{{created.response.body._id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### 5. Rename the created user (expect 200)
+PATCH {{baseUrl}}/users/{{created.response.body._id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "name": "Preimenovani Radnik"
+}
+
+### 6. Login as employee of Bezanija
+# @name employee
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "employee.bezanija@grocery.rs",
+  "password": "password123"
+}
+
+### 7. Employee tries to see a manager (expect 403)
+GET {{baseUrl}}/users/{{me.response.body.id}}
+Authorization: Bearer {{employee.response.body.token}}
+
+### 8. Employee tries to delete someone (expect 403)
+DELETE {{baseUrl}}/users/{{created.response.body._id}}
+Authorization: Bearer {{employee.response.body.token}}
+
+### 9. Manager deletes the created user (expect 204)
+DELETE {{baseUrl}}/users/{{created.response.body._id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### 10. Login with wrong password (expect 401)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "manager.novibeograd@grocery.rs",
+  "password": "pogresna"
+}
